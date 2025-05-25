@@ -15,6 +15,14 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        var employees = new[]
+         {
+        new { id = 1, fullname = "John Doe", position = "Manager", address = "123 Main St" },
+        new { id = 2, fullname = "Jane Smith", position = "Developer", address = "456 Elm St" },
+        new { id = 3, fullname = "Alice Johnson", position = "Designer", address = "789 Oak St" }
+        };
+
+        ViewData["employees"] = employees;
         return View();
     }
 

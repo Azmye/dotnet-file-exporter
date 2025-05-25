@@ -1,8 +1,37 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var employees = ViewData["employees"] as IEnumerable<dynamic>;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Hello, world!- The time on the server @DateTime.Now</p>
+<div>
+
+    <div class="d-flex justify-content-between py-2">
+        <h1 class="fs-3">Employee List</h1>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-success">Export Excel</button>
+            <button type="button" class="btn btn-danger">View PDF</button>
+        </div>
+    </div>
+    <table class="w-100 table table-bordered text-center">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fullname</th>
+                <th scope="col">Position</th>
+                <th scope="col">Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <th scope="row">@employee.id</th>
+                    <td>@employee.fullname</td>
+                    <td>@employee.position</td>
+                    <td>@employee.address</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
 </div>

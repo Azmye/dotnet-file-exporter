@@ -117,3 +117,4 @@ D:\Dev\aegis-test\dotnet-file-exporter\bin\Debug\net9.0\ExcelNumberFormat.dll
 D:\Dev\aegis-test\dotnet-file-exporter\bin\Debug\net9.0\RBush.dll
 D:\Dev\aegis-test\dotnet-file-exporter\bin\Debug\net9.0\SixLabors.Fonts.dll
 D:\Dev\aegis-test\dotnet-file-exporter\bin\Debug\net9.0\System.IO.Packaging.dll
+D:\Dev\aegis-test\dotnet-file-exporter\obj\Debug\net9.0\dotnet-file-exporter.sourcelink.json
