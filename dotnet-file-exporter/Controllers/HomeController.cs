@@ -2,38 +2,52 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using dotnet_file_exporter.Models;
 
-namespace dotnet_file_exporter.Controllers;
-
-public class HomeController : Controller
+namespace dotnet_file_exporter.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        private readonly ILogger<HomeController> _logger;
 
-    public IActionResult Index()
-    {
-        var employees = new[]
-         {
-        new { id = 1, fullname = "John Doe", position = "Manager", address = "123 Main St" },
-        new { id = 2, fullname = "Jane Smith", position = "Developer", address = "456 Elm St" },
-        new { id = 3, fullname = "Alice Johnson", position = "Designer", address = "789 Oak St" }
-        };
+        // Global-level private field for the employee data
+        private readonly List<Employee> _employees;
 
-        ViewData["employees"] = employees;
-        return View();
-    }
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+            // Initialize the employees array once in the constructor
+            _employees = new List<Employee>
+                {
+                    new Employee { Id = 1, Fullname = "John Doe", Position = "Manager", Address = "123 Main St" },
+                    new Employee { Id = 2, Fullname = "Jane Smith", Position = "Developer", Address = "456 Elm St" },
+                    new Employee { Id = 3, Fullname = "Alice Johnson", Position = "Designer", Address = "789 Oak St" }
+                };
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Index()
+        {
+            return View(_employees);
+        }
+
+        public IActionResult EmployeePDF()
+        {
+            return new Rotativa.AspNetCore.ViewAsPdf("Index", _employees)
+            {
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
+            };
+        }
+
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }

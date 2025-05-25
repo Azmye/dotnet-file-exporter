@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<dotnet_file_exporter.Models.Employee>
+@{
     ViewData["Title"] = "Home Page";
     var employees = ViewData["employees"] as IEnumerable<dynamic>;
 }
@@ -9,7 +10,7 @@
         <h1 class="fs-3">Employee List</h1>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-success">Export Excel</button>
-            <button type="button" class="btn btn-danger">View PDF</button>
+            <a asp-action="EmployeePdf" class="btn btn-danger">View PDF</a>
         </div>
     </div>
     <table class="w-100 table table-bordered text-center">
@@ -22,13 +23,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var employee in employees)
+            @foreach (var employee in Model)
             {
                 <tr>
-                    <th scope="row">@employee.id</th>
-                    <td>@employee.fullname</td>
-                    <td>@employee.position</td>
-                    <td>@employee.address</td>
+                    <th scope="row">@employee.Id</th>
+                    <td>@employee.Fullname</td>
+                    <td>@employee.Position</td>
+                    <td>@employee.Address</td>
                 </tr>
             }
 
