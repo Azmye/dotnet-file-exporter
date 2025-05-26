@@ -2,34 +2,33 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using dotnet_file_exporter.Models;
 using ClosedXML.Excel;
+using dotnet_file_exporter.Repository;
+using System.IO;
 
 namespace dotnet_file_exporter.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        private readonly List<Employee> _employees;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IEmployeeRepository employeeRepository)
         {
             _logger = logger;
-            _employees = new List<Employee>
-                {
-                    new Employee { Id = 1, Fullname = "John Doe", Position = "Manager", Address = "123 Main St" },
-                    new Employee { Id = 2, Fullname = "Jane Smith", Position = "Developer", Address = "456 Elm St" },
-                    new Employee { Id = 3, Fullname = "Alice Johnson", Position = "Designer", Address = "789 Oak St" }
-                };
+            _employeeRepository = employeeRepository;
         }
 
         public IActionResult Index()
         {
-            return View(_employees);
+            var employees = _employeeRepository.GetAllEmployees();
+            return View(employees);
         }
 
         public IActionResult EmployeePDF()
         {
-            return new Rotativa.AspNetCore.ViewAsPdf("EmployeePDF", _employees)
+            var employees = _employeeRepository.GetAllEmployees();
+
+            return new Rotativa.AspNetCore.ViewAsPdf("EmployeePDF", employees)
             {
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
@@ -38,6 +37,8 @@ namespace dotnet_file_exporter.Controllers
 
         public IActionResult ExportExcel()
         {
+            var employees = _employeeRepository.GetAllEmployees();
+
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Employees");
 
@@ -47,14 +48,14 @@ namespace dotnet_file_exporter.Controllers
             worksheet.Cell(1, 4).Value = "Address";
             worksheet.Range("A1:D1").Style.Font.Bold = true;
 
-
-            // Inserting Data
-            for (int i = 0; i < _employees.Count; i++)
+            int row = 2;
+            foreach (var emp in employees)
             {
-                worksheet.Cell(i + 2, 1).Value = _employees[i].Id;
-                worksheet.Cell(i + 2, 2).Value = _employees[i].Fullname;
-                worksheet.Cell(i + 2, 3).Value = _employees[i].Position;
-                worksheet.Cell(i + 2, 4).Value = _employees[i].Address;
+                worksheet.Cell(row, 1).Value = emp.Id;
+                worksheet.Cell(row, 2).Value = emp.Fullname;
+                worksheet.Cell(row, 3).Value = emp.Position;
+                worksheet.Cell(row, 4).Value = emp.Address;
+                row++;
             }
 
             worksheet.Columns().AdjustToContents();
