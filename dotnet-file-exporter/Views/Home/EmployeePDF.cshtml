@@ -1,0 +1,41 @@
+@model IEnumerable<dotnet_file_exporter.Models.Employee>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Employee PDF</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <h1 class="text-start">Employee List</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fullname</th>
+                <th>Position</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.Fullname</td>
+                    <td>@employee.Position</td>
+                    <td>@employee.Address</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+
+</html>

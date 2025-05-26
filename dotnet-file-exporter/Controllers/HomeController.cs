@@ -8,14 +8,11 @@ namespace dotnet_file_exporter.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        // Global-level private field for the employee data
         private readonly List<Employee> _employees;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-
-            // Initialize the employees array once in the constructor
             _employees = new List<Employee>
                 {
                     new Employee { Id = 1, Fullname = "John Doe", Position = "Manager", Address = "123 Main St" },
@@ -31,12 +28,13 @@ namespace dotnet_file_exporter.Controllers
 
         public IActionResult EmployeePDF()
         {
-            return new Rotativa.AspNetCore.ViewAsPdf("Index", _employees)
+            return new Rotativa.AspNetCore.ViewAsPdf("EmployeePDF", _employees)
             {
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
             };
         }
+
 
 
         public IActionResult Privacy()
