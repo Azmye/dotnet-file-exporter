@@ -1,10 +1,15 @@
+using dotnet_file_exporter.Data;
+using dotnet_file_exporter.Repository;
 using Newtonsoft.Json;
 using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 var app = builder.Build();
 
