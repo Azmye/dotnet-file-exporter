@@ -1,4 +1,8 @@
 ## Ignore build output
+bin/
+obj/
+*/bin/
+*/obj/
 **/bin/
 **/obj/
 
