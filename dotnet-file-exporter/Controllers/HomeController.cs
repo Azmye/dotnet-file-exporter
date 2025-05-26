@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using dotnet_file_exporter.Models;
+using ClosedXML.Excel;
 
 namespace dotnet_file_exporter.Controllers
 {
@@ -35,7 +36,36 @@ namespace dotnet_file_exporter.Controllers
             };
         }
 
+        public IActionResult ExportExcel()
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Employees");
 
+            worksheet.Cell(1, 1).Value = "Id";
+            worksheet.Cell(1, 2).Value = "Fullname";
+            worksheet.Cell(1, 3).Value = "Position";
+            worksheet.Cell(1, 4).Value = "Address";
+            worksheet.Range("A1:D1").Style.Font.Bold = true;
+
+
+            // Inserting Data
+            for (int i = 0; i < _employees.Count; i++)
+            {
+                worksheet.Cell(i + 2, 1).Value = _employees[i].Id;
+                worksheet.Cell(i + 2, 2).Value = _employees[i].Fullname;
+                worksheet.Cell(i + 2, 3).Value = _employees[i].Position;
+                worksheet.Cell(i + 2, 4).Value = _employees[i].Address;
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            stream.Position = 0;
+
+            var fileName = $"Employees-{DateTime.Now:yyyyMMdd}.xlsx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
 
         public IActionResult Privacy()
         {
